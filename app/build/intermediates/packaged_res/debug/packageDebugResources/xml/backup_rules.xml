@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <xml name="backup_rules">
+        <include domain="sharedpref" path="." />
+        <exclude domain="sharedpref" path="device.xml" />
+    </xml>
+    <xml name="data_extraction_rules">
+        <include domain="sharedpref" path="." />
+        <exclude domain="sharedpref" path="device.xml" />
+    </xml>
+</resources>

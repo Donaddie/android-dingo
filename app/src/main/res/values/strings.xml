@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dingo</string>
+    
+    <!-- Navigation -->
+    <string name="nav_today">Today</string>
+    <string name="nav_finance">Finance</string>
+    <string name="nav_life">Life</string>
+    <string name="nav_inbox">Inbox</string>
+    <string name="nav_more">More</string>
+    
+    <!-- Add Anything -->
+    <string name="add_anything">+ Add Anything</string>
+    <string name="add_item">Add Item</string>
+    <string name="type_your_input">Type what you need…</string>
+    <string name="submit">Submit</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    
+    <!-- Today -->
+    <string name="today">Today</string>
+    <string name="tasks">Tasks</string>
+    <string name="reminders">Reminders</string>
+    <string name="bills">Bills</string>
+    <string name="follow_ups">Follow-ups</string>
+    <string name="vehicle_alerts">Vehicle Alerts</string>
+    <string name="money_summary">Money Summary</string>
+    
+    <!-- Finance -->
+    <string name="finance">Finance</string>
+    <string name="transactions">Transactions</string>
+    <string name="income">Income</string>
+    <string name="expenses">Expenses</string>
+    <string name="categories">Categories</string>
+    <string name="budgets">Budgets</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="savings_goals">Savings Goals</string>
+    <string name="emergency_fund">Emergency Fund</string>
+    <string name="investments">Investments</string>
+    <string name="available_to_spend">Available to Spend</string>
+    
+    <!-- Life -->
+    <string name="life">Life</string>
+    <string name="events">Events</string>
+    <string name="goals">Goals</string>
+    
+    <!-- Inbox -->
+    <string name="inbox">Inbox</string>
+    <string name="waiting_for">Waiting For</string>
+    <string name="notes">Notes</string>
+    
+    <!-- Vehicle -->
+    <string name="vehicle">Vehicle</string>
+    <string name="mot">MOT</string>
+    <string name="insurance">Insurance</string>
+    <string name="road_tax">Road Tax</string>
+    <string name="service">Service</string>
+    <string name="repairs">Repairs</string>
+    <string name="vehicle_expenses">Vehicle Expenses</string>
+    
+    <!-- Documents -->
+    <string name="documents">Documents</string>
+    <string name="important_documents">Important Documents</string>
+    <string name="receipts">Receipts</string>
+    <string name="expiry_dates">Expiry Dates</string>
+    
+    <!-- Common -->
+    <string name="search">Search</string>
+    <string name="no_items_yet">No items yet</string>
+    <string name="tap_plus_to_add">Tap + to add something</string>
+</resources>
