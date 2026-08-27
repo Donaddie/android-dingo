@@ -88,11 +88,21 @@ fun DingoNavigation(database: DingoDatabase) {
                     }
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.Default.Menu, contentDescription = "More") },
-                    label = { Text("More") },
-                    selected = navController.currentBackStackEntry?.destination?.route == "more",
+                    icon = { Icon(Icons.Default.DirectionsCar, contentDescription = "Vehicle") },
+                    label = { Text("Vehicle") },
+                    selected = navController.currentBackStackEntry?.destination?.route == "vehicle",
                     onClick = {
-                        navController.navigate("more") {
+                        navController.navigate("vehicle") {
+                            popUpTo("bottom_nav") { inclusive = true }
+                        }
+                    }
+                )
+                NavigationBarItem(
+                    icon = { Icon(Icons.Default.Description, contentDescription = "Documents") },
+                    label = { Text("Docs") },
+                    selected = navController.currentBackStackEntry?.destination?.route == "documents",
+                    onClick = {
+                        navController.navigate("documents") {
                             popUpTo("bottom_nav") { inclusive = true }
                         }
                     }
@@ -145,13 +155,8 @@ fun DingoNavigation(database: DingoDatabase) {
     
     if (showAddAnything) {
         AddAnythingScreen(
-            onDismiss = { showAddAnything = false },
-            onAdd = { text ->
-                showAddAnything = false
-                navController.navigate("today") {
-                    popUpTo("bottom_nav") { inclusive = true }
-                }
-            }
+            database = database,
+            onDismiss = { showAddAnything = false }
         )
     }
 }
