@@ -2,8 +2,6 @@ package com.donaddie.androiddingo.ui.screens.documents
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -40,7 +38,7 @@ fun DocumentsScreen() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 StatChip(label = "Important", value = "5", color = Color(0xFFFF5252))
-                StatChip(label = "Expiring Soon", value = "2", color = Color(0xFFFFA000))
+                StatChip(label = "Expiring", value = "2", color = Color(0xFFFFA000))
                 StatChip(label = "Receipts", value = "18", color = Color(0xFF4CAF50))
             }
             
@@ -50,22 +48,80 @@ fun DocumentsScreen() {
             SectionHeader(title = "Important Documents")
             Spacer(modifier = Modifier.height(8.dp))
             
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(documentList) { doc ->
-                    DocumentCard(document = doc)
+            val documents = listOf(
+                DocumentItem("Driving Licence", "Personal", false),
+                DocumentItem("Vehicle Registration", "Vehicle", false),
+                DocumentItem("Insurance Certificate", "Vehicle", false),
+                DocumentItem("MOT Certificate", "Vehicle", true),
+                DocumentItem("Tax Document", "Finance", false)
+            )
+            
+            documents.forEach { doc ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {},
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(12.dp).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Icon(
+                            if (doc.expiryWarning) Icons.Default.Warning else Icons.Default.Description,
+                            contentDescription = null,
+                            tint = if (doc.expiryWarning) Color(0xFFFF5252) else MaterialTheme.colorScheme.primary
+                        )
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(doc.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text(doc.category, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            if (doc.expiryWarning) {
+                                Text("Expiring soon!", style = MaterialTheme.typography.labelSmall, color = Color(0xFFFF5252))
+                            }
+                        }
+                    }
                 }
+                Spacer(modifier = Modifier.height(8.dp))
             }
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Receipts
+            // Recent Receipts
             SectionHeader(title = "Recent Receipts")
             Spacer(modifier = Modifier.height(8.dp))
             
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(receiptList) { receipt ->
-                    ReceiptCard(receipt = receipt)
+            val receipts = listOf(
+                ReceiptItem("Tesco", "27 Aug 2026", 45.50),
+                ReceiptItem("Shell Petrol", "26 Aug 2026", 62.00),
+                ReceiptItem("Amazon", "25 Aug 2026", 29.99)
+            )
+            
+            receipts.forEach { receipt ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {},
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(12.dp).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Icon(Icons.Default.ReceiptLong, contentDescription = null, tint = Color(0xFF4CAF50))
+                            Column {
+                                Text(receipt.merchant, style = MaterialTheme.typography.titleSmall)
+                                Text(receipt.date, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                        Text(
+                            String.format("£%.2f", receipt.amount),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
@@ -91,79 +147,5 @@ fun SectionHeader(title: String) {
     Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
 }
 
-@Composable
-fun DocumentCard(document: Document) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {},
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-    ) {
-        Row(
-            modifier = Modifier.padding(12.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Icon(
-                if (document.expiryWarning) Icons.Default.Warning else Icons.Default.Description,
-                contentDescription = null,
-                tint = if (document.expiryWarning) Color(0xFFFF5252) else MaterialTheme.colorScheme.primary
-            )
-            Column(modifier = Modifier.weight(1f)) {
-                Text(document.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                Text(document.category, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                if (document.expiryWarning) {
-                    Text("Expiring soon!", style = MaterialTheme.typography.labelSmall, color = Color(0xFFFF5252))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ReceiptCard(receipt: Receipt) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {},
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-    ) {
-        Row(
-            modifier = Modifier.padding(12.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Icon(Icons.Default.ReceiptLong, contentDescription = null, tint = Color(0xFF4CAF50))
-                Column {
-                    Text(receipt.merchant, style = MaterialTheme.typography.titleSmall)
-                    Text(receipt.date, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-            }
-            Text(
-                String.format("£%.2f", receipt.amount),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-data class Document(val name: String, val category: String, val expiryWarning: Boolean = false)
-data class Receipt(val merchant: String, val date: String, val amount: Double)
-
-private val documentList = listOf(
-    Document("Driving Licence", "Personal", false),
-    Document("Vehicle Registration", "Vehicle", false),
-    Document("Insurance Certificate", "Vehicle", false),
-    Document("MOT Certificate", "Vehicle", true),
-    Document("Tax Document", "Finance", false),
-    Document("Property Deed", "Home", false),
-    Document("Electrical Certificate", "Home", true)
-)
-
-private val receiptList = listOf(
-    Receipt("Tesco", "27 Aug 2026", 45.50),
-    Receipt("Shell Petrol", "26 Aug 2026", 62.00),
-    Receipt("Amazon", "25 Aug 2026", 29.99),
-    Receipt("Costa Coffee", "25 Aug 2026", 3.50),
-    Receipt("Sainsbury's", "24 Aug 2026", 78.25)
-)
+data class DocumentItem(val name: String, val category: String, val expiryWarning: Boolean = false)
+data class ReceiptItem(val merchant: String, val date: String, val amount: Double)

@@ -2,8 +2,6 @@ package com.donaddie.androiddingo.ui.screens.vehicle
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -13,27 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.donaddie.androiddingo.data.database.DingoDatabase
-import com.donaddie.androiddingo.data.model.Transaction
-import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VehicleScreen(database: DingoDatabase) {
-    var transactions by remember { mutableStateOf<List<Transaction>>(emptyList()) }
-    
-    LaunchedEffect(database) {
-        database.transactionDao().getAll().collectLatest { list ->
-            transactions = list
-        }
-    }
-    
-    val vehicleExpenses = transactions.filter { t ->
-        t.category.contains("vehicle", ignoreCase = true) || t.category.contains("car", ignoreCase = true)
-    }
-    var totalVehicleSpent by remember { mutableStateOf(0.0) }
-    vehicleExpenses.forEach { totalVehicleSpent += it.amount }
-    
+fun VehicleScreen() {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Vehicle") }) },
         floatingActionButton = {
@@ -71,7 +52,19 @@ fun VehicleScreen(database: DingoDatabase) {
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Alerts
+            // Stats Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                StatChip(label = "MOT Days", value = "30", color = Color(0xFFFF5252))
+                StatChip(label = "Insurance", value = "60d", color = Color(0xFFFFA000))
+                StatChip(label = "Service", value = "90d", color = Color(0xFF2196F3))
+            }
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            // Reminders
             SectionHeader(title = "Upcoming Reminders")
             Spacer(modifier = Modifier.height(8.dp))
             
@@ -111,51 +104,20 @@ fun VehicleScreen(database: DingoDatabase) {
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Expenses
-            SectionHeader(title = "Vehicle Expenses")
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
-            ) {
-                Row(
-                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("Total Spent", style = MaterialTheme.typography.titleMedium)
-                    Text(
-                        String.format("£%.2f", totalVehicleSpent),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
             // History
-            SectionHeader(title = "History")
+            SectionHeader(title = "Service History")
             Spacer(modifier = Modifier.height(8.dp))
             
-            if (vehicleExpenses.isEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(Icons.Default.DirectionsCar, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(48.dp))
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text("No vehicle expenses yet", style = MaterialTheme.typography.bodyMedium)
-                    }
-                }
-            } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(vehicleExpenses.take(10)) { transaction ->
-                        VehicleExpenseRow(transaction = transaction)
-                    }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(Icons.Default.DirectionsCar, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(48.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("No service history yet", style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }
@@ -163,26 +125,16 @@ fun VehicleScreen(database: DingoDatabase) {
 }
 
 @Composable
-fun VehicleExpenseRow(transaction: Transaction) {
+fun StatChip(label: String, value: String, color: Color) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {},
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.1f))
     ) {
-        Row(
-            modifier = Modifier.padding(12.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = Modifier.padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(transaction.description, style = MaterialTheme.typography.titleSmall)
-                Text(transaction.category, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            Text(
-                String.format("£%.2f", transaction.amount),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = color)
+            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
