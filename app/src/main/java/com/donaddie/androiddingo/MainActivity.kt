@@ -135,10 +135,10 @@ fun DingoNavigation(database: DingoDatabase) {
                 )
             }
             
-            composable("finance") { FinanceScreen() }
-            composable("life") { LifeScreen() }
+            composable("finance") { FinanceScreen(database = database) }
+            composable("life") { LifeScreen(database = database) }
             composable("inbox") { InboxScreen() }
-            composable("vehicle") { VehicleScreen() }
+            composable("vehicle") { VehicleScreen(database = database) }
             composable("documents") { DocumentsScreen() }
         }
     }
